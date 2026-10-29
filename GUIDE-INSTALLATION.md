@@ -98,24 +98,19 @@ Les notifications s'affichent **même quand l'app est fermée**. Quand l'app est
 
 ## 7. Mettre en ligne (pour les téléphones des clientes)
 
-Exemple gratuit avec **Render** (https://render.com) :
+Hébergement gratuit : **Neon** (PostgreSQL, https://neon.tech) + **Render** (serveur, https://render.com). Le fichier `render.yaml` du dépôt contient déjà toute la configuration.
 
-1. Mettez le dossier `palm` sur GitHub. Le fichier `.env` est exclu automatiquement par `server/.gitignore`.
-2. Sur Render, créez un **PostgreSQL** (New → Postgres) et copiez son *Internal Database URL*.
-3. Créez ensuite un **Web Service** relié au dépôt GitHub :
-   - Root Directory : `server`
-   - Build Command : `npm install`
-   - Start Command : `npm start`
-   - Variables d'environnement :
-     - `DATABASE_URL` = l'URL copiée à l'étape 2
-     - `DATABASE_SSL` = `true`
-     - `JWT_SECRET` = une longue phrase aléatoire
-     - `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` = les mêmes valeurs que dans votre `.env`
-4. Render donne une adresse en https, par exemple `palm-beauty.onrender.com`. C'est le lien à partager aux clientes.
+1. **Neon** : créez un projet, puis copiez la *connection string* (`postgresql://…neon.tech/neondb?sslmode=require…`). Les tables se créent toutes seules au premier démarrage du serveur.
+2. **Render** : connectez-vous avec GitHub → **New** → **Blueprint** → choisissez le dépôt `palm` → **Apply**. Render demande 3 valeurs :
+   - `DATABASE_URL` = la connection string Neon
+   - `VAPID_PUBLIC_KEY` et `VAPID_PRIVATE_KEY` = les valeurs de votre `server/.env`
+   (`JWT_SECRET` est généré automatiquement par Render.)
+3. Attendez le déploiement (2 à 4 min) : Render donne une adresse en https, par exemple `palm-beauty-centre.onrender.com`. C'est le lien à partager aux clientes.
+4. Chaque `git push` sur `main` redéploie automatiquement le site.
 
-Pour créer l'admin en ligne : dans le **Shell** du service Render, tapez `npm run make-admin -- 22807207`.
+Pour donner le rôle admin à un compte en ligne : Render → service → **Shell** → `npm run make-admin -- NUMERO`.
 
-> Sur l'offre gratuite de Render, le serveur se met en veille après 15 minutes sans visite (le premier chargement prend alors environ 30 secondes), et la base PostgreSQL gratuite expire au bout de 30 jours. Pour le vrai centre, prévoyez l'offre payante d'entrée de gamme, ou un VPS.
+> Offre gratuite Render : le serveur se met en veille après 15 minutes sans visite (le premier chargement prend alors environ 50 secondes). Les données restent en sécurité sur Neon. Pour le vrai centre, l'offre Render « Starter » supprime cette veille.
 
 ---
 

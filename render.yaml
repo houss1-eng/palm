@@ -1,0 +1,27 @@
+# Déploiement sur Render (Blueprint) : Render > New > Blueprint > ce dépôt.
+# Les valeurs "sync: false" sont demandées au moment de la création (jamais dans le dépôt).
+services:
+  - type: web
+    name: palm-beauty-centre
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATABASE_URL # lien de connexion Neon
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: VAPID_PUBLIC_KEY # copier depuis server/.env
+        sync: false
+      - key: VAPID_PRIVATE_KEY # copier depuis server/.env
+        sync: false
+      - key: VAPID_SUBJECT
+        value: mailto:contact@palm-beauty.tn
