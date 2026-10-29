@@ -1,0 +1,25 @@
+{
+  "name": "palm-beauty-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API Palm Beauty Centre : comptes, catalogue, réservations, notifications Web Push.",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "make-admin": "node scripts/make-admin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
+    "web-push": "^3.6.7"
+  }
+}

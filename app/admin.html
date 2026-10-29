@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Palm Admin</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#04261a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Palm Admin">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin">
+  <div id="setupBanner" class="setup-banner" hidden>
+    ⚙️ Ouvrez l'application via le serveur : lancez <code>npm start</code> dans le dossier server puis allez sur <code>http://localhost:3000</code>.
+  </div>
+
+  <!-- Connexion -->
+  <section id="login" class="login">
+    <img src="icons/logo.png" alt="" width="96" height="96" class="login-logo">
+    <h1>Espace admin</h1>
+    <form id="loginForm" novalidate>
+      <input name="phone" type="tel" inputmode="tel" placeholder="Téléphone" autocomplete="username" dir="ltr">
+      <input name="password" type="password" placeholder="Mot de passe" autocomplete="current-password">
+      <p id="loginError" class="error"></p>
+      <button class="btn gold wide">Entrer</button>
+    </form>
+    <a class="back" href="index.html">← Retour au site</a>
+  </section>
+
+  <!-- Application admin -->
+  <div id="app" hidden>
+    <header class="topbar">
+      <a class="brand" href="index.html" target="_blank">
+        <img src="icons/logo.png" alt="" width="40" height="40">
+        <span>Palm<small>Admin</small></span>
+      </a>
+      <div class="top-actions">
+        <button id="pushBtn" class="pill" type="button" hidden>🔔 Notifications</button>
+        <button id="logout" class="pill" type="button">Déconnexion</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab on" data-tab="bookings">📅 Réservations <span id="newCount" class="count" hidden></span></button>
+      <button class="tab" data-tab="services">✨ Services</button>
+      <button class="tab" data-tab="categories">🗂️ Catégories</button>
+      <button class="tab" data-tab="users">👥 Clientes</button>
+      <button class="tab" data-tab="site">🖼️ Site</button>
+      <button class="tab" data-tab="settings">⚙️ Paramètres</button>
+    </nav>
+
+    <!-- Réservations -->
+    <section class="panel" id="tab-bookings">
+      <div class="toolbar">
+        <select id="statusFilter">
+          <option value="">Toutes</option>
+          <option value="nouveau">Nouvelles</option>
+          <option value="confirmé">Confirmées</option>
+          <option value="terminé">Terminées</option>
+          <option value="annulé">Annulées</option>
+        </select>
+        <input id="dateFilter" type="date" title="Filtrer par date">
+        <button class="btn gold" id="addBooking" type="button">+ Réservation</button>
+      </div>
+      <div id="stats" class="stats"></div>
+      <div id="bookingList" class="booking-list"></div>
+    </section>
+
+    <!-- Services -->
+    <section class="panel" id="tab-services" hidden>
+      <div class="toolbar">
+        <select id="catFilter"></select>
+        <button class="btn gold" id="addService" type="button">+ Service</button>
+      </div>
+      <div id="serviceList"></div>
+    </section>
+
+    <!-- Catégories -->
+    <section class="panel" id="tab-categories" hidden>
+      <div class="toolbar">
+        <p class="muted">Ordre d'affichage sur le site : utilisez ▲ ▼.</p>
+        <button class="btn gold" id="addCategory" type="button">+ Catégorie</button>
+      </div>
+      <div id="categoryList"></div>
+    </section>
+
+    <!-- Clientes et comptes -->
+    <section class="panel" id="tab-users" hidden>
+      <div class="toolbar">
+        <input id="userSearch" type="search" placeholder="Rechercher nom ou téléphone…">
+        <select id="roleFilter">
+          <option value="">Tous les comptes</option>
+          <option value="client">Clientes</option>
+          <option value="admin">Admins</option>
+        </select>
+        <button class="btn gold" id="addUser" type="button">+ Compte</button>
+      </div>
+      <div id="userList"></div>
+    </section>
+
+    <!-- Textes et photo de la page d'accueil -->
+    <section class="panel" id="tab-site" hidden>
+      <form id="siteForm" class="site-form" novalidate>
+        <div class="settings">
+          <h3>Photo de l'accueil</h3>
+          <label class="img-drop hero-drop">
+            <div class="img-preview" id="heroPreview"></div>
+            <span class="img-drop-text">📷 <b>Changer la photo d'accueil</b><small>Grande photo derrière le titre · paysage de préférence</small></span>
+            <input type="file" id="heroInput" accept="image/jpeg,image/png,image/webp" hidden>
+          </label>
+          <button type="button" class="mini" id="heroReset">Remettre la photo d'origine</button>
+        </div>
+        <div id="siteTexts"></div>
+        <div class="settings">
+          <h3>Chiffres</h3>
+          <div class="two">
+            <label>Années d'expérience <input name="statYears" type="number" min="0"></label>
+            <label>Nombre de marques <input name="statBrands" type="number" min="0"></label>
+          </div>
+          <p class="muted small">Le nombre de soins et de packs est calculé automatiquement.</p>
+        </div>
+        <div class="site-actions">
+          <button class="btn gold wide">Enregistrer le site</button>
+          <button type="button" class="mini" id="siteReset">Rétablir tous les textes d'origine</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Paramètres -->
+    <section class="panel" id="tab-settings" hidden>
+      <form id="settingsForm" class="settings">
+        <h3>Contact</h3>
+        <label>Téléphone (affiché) <input name="phone" dir="ltr"></label>
+        <label>Instagram (sans @) <input name="instagram" dir="ltr"></label>
+        <div class="two">
+          <label>Ville (FR) <input name="cityFr"></label>
+          <label>Ville (AR) <input name="cityAr" dir="rtl"></label>
+        </div>
+        <h3>Horaires des créneaux</h3>
+        <div class="two">
+          <label>Ouverture (heure) <input name="openHour" type="number" min="0" max="23"></label>
+          <label>Fermeture (heure) <input name="closeHour" type="number" min="1" max="24"></label>
+        </div>
+        <button class="btn gold wide">Enregistrer</button>
+      </form>
+
+      <form id="passwordForm" class="settings" novalidate>
+        <h3>Mon mot de passe</h3>
+        <input type="text" name="username" autocomplete="username" hidden>
+        <label>Mot de passe actuel <input name="current" type="password" autocomplete="current-password"></label>
+        <label>Nouveau mot de passe <input name="next" type="password" autocomplete="new-password"></label>
+        <label>Confirmer le nouveau mot de passe <input name="confirm" type="password" autocomplete="new-password"></label>
+        <p class="error" id="passwordError"></p>
+        <button class="btn gold wide">Changer le mot de passe</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Formulaire service -->
+  <dialog id="serviceDlg" class="sheet">
+    <form id="serviceForm" class="sheet-inner" novalidate>
+      <div class="sheet-head">
+        <h2 id="serviceDlgTitle">Service</h2>
+        <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+      </div>
+      <!-- L'essentiel : photo + nom (+ catégorie et prix). Le reste est optionnel. -->
+      <label class="img-drop" id="imgDrop">
+        <div class="img-preview" id="imgPreview"></div>
+        <span class="img-drop-text">📷 <b id="imgPickLabel">Choisir une photo</b><small>JPG, PNG ou WebP · réduite automatiquement</small></span>
+        <input type="file" id="imgInput" accept="image/jpeg,image/png,image/webp" hidden>
+      </label>
+      <button type="button" class="mini bad" id="imgRemove">Retirer la photo</button>
+      <label>Nom du service <input name="nameFr" placeholder="Ex. : Soin éclat mariée"></label>
+      <div class="two">
+        <label>Catégorie <select name="cat"></select></label>
+        <label>Prix (DT) <input name="price" type="number" min="0" step="0.5" placeholder="vide = sur demande"></label>
+      </div>
+
+      <details class="more" id="moreOpts">
+        <summary>Plus d'options <small>(arabe, description, promo, durée…)</small></summary>
+        <label>Nom en arabe <input name="nameAr" dir="rtl"></label>
+        <label>Description (FR) <textarea name="descFr" rows="2"></textarea></label>
+        <label>Description (AR) <textarea name="descAr" rows="2" dir="rtl"></textarea></label>
+        <div class="two">
+          <label>Ancien prix (promo) <input name="oldPrice" type="number" min="0" step="0.5"></label>
+          <label>Durée (min) <input name="duration" type="number" min="0" step="5"></label>
+        </div>
+        <label>Badge (FR | AR) <input name="badge" placeholder="Promo | تخفيض"></label>
+        <label>Contenu du pack — une ligne par élément, format « FR | AR »
+          <textarea name="items" rows="5" placeholder="Hammam privé | حمام خاص"></textarea>
+        </label>
+        <div class="checks">
+          <label><input type="checkbox" name="active"> Visible sur le site</label>
+          <label><input type="checkbox" name="featured"> Pack mis en avant</label>
+          <label><input type="checkbox" name="bridal"> Spécial mariée</label>
+        </div>
+      </details>
+      <p class="error" id="serviceError"></p>
+      <button class="btn gold wide">Enregistrer</button>
+    </form>
+  </dialog>
+
+  <!-- Réservation prise par téléphone / sur place -->
+  <dialog id="bookingDlg" class="sheet">
+    <form id="bookingForm" class="sheet-inner" novalidate>
+      <div class="sheet-head">
+        <h2 id="bookingDlgTitle">Nouvelle réservation</h2>
+        <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+      </div>
+      <label>Nom <input name="name"></label>
+      <label>Téléphone <input name="phone" type="tel" dir="ltr"></label>
+      <div class="two">
+        <label>Date <input name="date" type="date"></label>
+        <label>Heure <input name="time" type="time"></label>
+      </div>
+      <label>Soins <select name="services" multiple size="6"></select></label>
+      <p class="muted small">Ctrl/⌘ + clic pour en choisir plusieurs.</p>
+      <label>Remarque <textarea name="note" rows="2"></textarea></label>
+      <label>Statut
+        <select name="status">
+          <option value="nouveau">Nouveau</option>
+          <option value="confirmé">Confirmé</option>
+          <option value="terminé">Terminé</option>
+          <option value="annulé">Annulé</option>
+        </select>
+      </label>
+      <p class="error" id="bookingError"></p>
+      <button class="btn gold wide" id="bookingSubmit">Ajouter</button>
+    </form>
+  </dialog>
+
+  <!-- Formulaire catégorie -->
+  <dialog id="categoryDlg" class="sheet">
+    <form id="categoryForm" class="sheet-inner" novalidate>
+      <div class="sheet-head">
+        <h2 id="categoryDlgTitle">Catégorie</h2>
+        <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+      </div>
+      <label>Icône (un emoji) <input name="icon" maxlength="8" placeholder="🌸"></label>
+      <div class="two">
+        <label>Nom (FR) <input name="nameFr"></label>
+        <label>Nom (AR) <input name="nameAr" dir="rtl"></label>
+      </div>
+      <p class="error" id="categoryError"></p>
+      <button class="btn gold wide">Enregistrer</button>
+    </form>
+  </dialog>
+
+  <!-- Formulaire compte -->
+  <dialog id="userDlg" class="sheet">
+    <form id="userForm" class="sheet-inner" novalidate>
+      <div class="sheet-head">
+        <h2 id="userDlgTitle">Compte</h2>
+        <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+      </div>
+      <label>Nom et prénom <input name="fullName" autocomplete="off"></label>
+      <label>Téléphone (sert d'identifiant) <input name="phone" type="tel" dir="ltr" autocomplete="off"></label>
+      <label>Rôle
+        <select name="role">
+          <option value="client">Cliente</option>
+          <option value="admin">Admin (accès à cet espace)</option>
+        </select>
+      </label>
+      <label><span id="userPwLabel">Mot de passe</span> <input name="password" type="text" autocomplete="off" dir="ltr"></label>
+      <p class="muted small" id="userPwHint"></p>
+      <p class="error" id="userError"></p>
+      <button class="btn gold wide">Enregistrer</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

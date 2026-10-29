@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Palm Beauty Centre</title>
+  <meta name="description" content="Palm Beauty Centre – Gabès : hammam, packs spa, soins visage et corps, coiffure, épilation laser, spécial mariée.">
+  <meta name="theme-color" content="#04261a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Palm">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="preload" as="image" href="img/hero.jpg">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Palm Beauty Centre">
+      <img src="icons/logo.png" alt="" width="40" height="40">
+      <span>Palm<small>Beauty Centre</small></span>
+    </a>
+    <div class="top-actions">
+      <button id="langBtn" class="pill" type="button">عربي</button>
+      <button class="icon-btn" type="button" data-account aria-label="Mon espace">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8c.8-3.4 3.6-5.5 7-5.5s6.2 2.1 7 5.5"/></svg>
+        <span id="accountDot" class="dot" hidden></span>
+      </button>
+      <button class="icon-btn" type="button" data-book aria-label="Ma sélection">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M5 8h14l-1.2 12H6.2L5 8Zm4 0V6a3 3 0 0 1 6 0v2"/></svg>
+        <span id="cartCount" class="count" hidden>0</span>
+      </button>
+    </div>
+  </header>
+
+  <div id="setupBanner" class="setup-banner" hidden>
+    ⚙️ Ouvrez l'application via le serveur : lancez <code>npm start</code> dans le dossier server puis allez sur <code>http://localhost:3000</code>.
+  </div>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="sparkles" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="hero-inner">
+        <div class="logo-ring"><img class="hero-logo" src="icons/logo.png" alt="Palm Centre" width="150" height="150"></div>
+        <p class="eyebrow" data-i18n="tagline"></p>
+        <h1 class="shine" data-i18n="heroTitle"></h1>
+        <p class="lead" data-i18n="heroText"></p>
+        <div class="hero-cta">
+          <button class="btn gold glow" type="button" data-book data-i18n="bookNow"></button>
+          <a class="btn ghost" href="#packs" data-i18n="seePacks"></a>
+        </div>
+        <ul class="facts">
+          <li>📍 <span id="cityLabel"></span></li>
+          <li>💎 <span data-i18n="exp"></span></li>
+          <li>🌿 <span data-i18n="brands"></span></li>
+        </ul>
+      </div>
+      <a class="scroll-cue" href="#packs" aria-label="↓"><span></span></a>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
+    <section class="section-wrap light" id="packs">
+      <div class="section">
+        <p class="kicker" data-i18n="packsKicker"></p>
+        <h2 data-i18n="packsTitle"></h2>
+        <p class="sub" data-i18n="packsSub"></p>
+        <div class="grid packs-grid" id="featured"></div>
+      </div>
+    </section>
+
+    <section class="why" aria-label="Palm Beauty Centre">
+      <div class="why-grid">
+        <div class="why-item"><b data-count="20" id="countYears">0</b><span data-i18n="whyYears"></span></div>
+        <div class="why-item"><b data-count="0" id="countServices">0</b><span data-i18n="whyServices"></span></div>
+        <div class="why-item"><b data-count="0" id="countPacks">0</b><span data-i18n="whyPacks"></span></div>
+        <div class="why-item"><b data-count="3" id="countBrands">0</b><span data-i18n="whyBrands"></span></div>
+      </div>
+    </section>
+
+    <section class="section bride" id="mariee">
+      <p class="kicker" data-i18n="brideKicker"></p>
+      <h2>💍 <span data-i18n="brideTitle"></span></h2>
+      <p class="sub" data-i18n="brideSub"></p>
+      <div class="bride-grid" id="bridal"></div>
+    </section>
+
+    <section class="section" id="services">
+      <p class="kicker" data-i18n="servicesKicker"></p>
+      <h2 data-i18n="servicesTitle"></h2>
+      <input id="search" class="search" type="search" data-i18n-ph="search" autocomplete="off">
+      <div class="chips" id="chips"></div>
+      <div id="catalog"></div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <img class="contact-logo" src="icons/logo.png" alt="" width="84" height="84" loading="lazy">
+      <h2 data-i18n="contactTitle"></h2>
+      <p class="contact-line"><span id="phoneLabel" dir="ltr"></span> · <span id="igLabel" dir="ltr"></span></p>
+      <div class="contact-actions">
+        <a class="btn gold" id="callLink" data-i18n="call"></a>
+        <a class="btn ghost" id="igLink" target="_blank" rel="noopener" data-i18n="instagram"></a>
+      </div>
+      <p class="copy">© Palm Beauty Centre</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="#top"><span aria-hidden="true">🏠</span><span data-i18n="navHome"></span></a>
+    <a href="#services"><span aria-hidden="true">✨</span><span data-i18n="navServices"></span></a>
+    <button type="button" data-book><span aria-hidden="true">📅</span><span data-i18n="navBook"></span><span id="navCount" class="count" hidden>0</span></button>
+    <button type="button" data-account><span aria-hidden="true">👤</span><span data-i18n="navAccount"></span></button>
+  </nav>
+
+  <!-- Réservation -->
+  <dialog id="sheet" class="sheet">
+    <div class="sheet-inner">
+      <div class="sheet-head">
+        <h2 data-i18n="cart"></h2>
+        <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+      </div>
+      <ul id="cartList" class="cart-list"></ul>
+      <div id="cartTotal" class="cart-total"></div>
+
+      <div id="needLogin" class="need-login" hidden>
+        <p data-i18n="needLogin"></p>
+        <button class="btn gold wide" type="button" data-account data-i18n="loginToBook"></button>
+      </div>
+
+      <form id="bookForm" novalidate>
+        <label><span data-i18n="name"></span>
+          <input id="fName" autocomplete="name" required>
+        </label>
+        <label><span data-i18n="phone"></span>
+          <input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="22 123 456" dir="ltr" required>
+        </label>
+        <div class="two">
+          <label><span data-i18n="date"></span>
+            <input id="fDate" type="date" required>
+          </label>
+          <label><span data-i18n="time"></span>
+            <select id="fTime" required></select>
+          </label>
+        </div>
+        <label><span data-i18n="note"></span>
+          <textarea id="fNote" rows="2" data-i18n-ph="notePh"></textarea>
+        </label>
+        <p id="formError" class="error" role="alert"></p>
+        <button id="sendBtn" class="btn gold wide" type="submit" data-i18n="send"></button>
+        <p class="hint" data-i18n="sendHint"></p>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Mon espace -->
+  <dialog id="account" class="sheet">
+    <div class="sheet-inner">
+      <div class="sheet-head">
+        <h2 data-i18n="myAccount"></h2>
+        <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+      </div>
+      <div id="accountBody"></div>
+    </div>
+  </dialog>
+
+  <!-- Visionneuse : photo en grand au clic -->
+  <dialog id="lightbox" class="lightbox" aria-label="Photo">
+    <button class="x" type="button" data-close aria-label="Fermer">✕</button>
+    <figure>
+      <img id="lightboxImg" alt="">
+      <figcaption id="lightboxCap"></figcaption>
+    </figure>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
