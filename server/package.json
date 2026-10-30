@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "make-admin": "node scripts/make-admin.js"
+    "make-admin": "node scripts/make-admin.js",
+    "set-password": "node scripts/set-password.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
