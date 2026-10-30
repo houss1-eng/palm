@@ -32,7 +32,10 @@ router.post("/login", async (req, res) => {
   const phone = normalizePhone(req.body.phone);
   const { rows } = await query("select * from users where phone = $1", [phone]);
   const user = rows[0];
-  const ok = user && (await bcrypt.compare(String(req.body.password ?? ""), user.password_hash));
+  // Un espace copié-collé avant/après le mot de passe ne doit pas bloquer la connexion.
+  const typed = String(req.body.password ?? "");
+  const ok = user && ((await bcrypt.compare(typed, user.password_hash)) ||
+    (typed !== typed.trim() && (await bcrypt.compare(typed.trim(), user.password_hash))));
   if (!ok) return res.status(401).json({ error: "Invalid login credentials" });
   res.json({ token: signToken(user), user: publicUser(user) });
 });
